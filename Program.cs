@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
@@ -19,7 +18,8 @@ namespace bot
 
         private static void Configure(HostBuilderContext context, IServiceCollection services)
         {
-            services.AddSingleton<TelegramBotClient>(b => new TelegramBotClient("2090755258:AAF-SGDmt_udj52KE1yDSKrb4hWu-EcTUjA"));
+            services.AddSingleton<TelegramBotClient>(b => new TelegramBotClient
+                        ("2071285540:AAGHBdKiTXLgI4cy2NjkfuTCYcNSvARQ85k"));
             services.AddHostedService<Bot>();
         }
     }

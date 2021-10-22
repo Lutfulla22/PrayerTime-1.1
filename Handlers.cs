@@ -78,31 +78,44 @@ namespace bot
         private static async Task BotOnMessageReceived(ITelegramBotClient client, Message message)
         {
             Console.WriteLine($"{message.Text}");
-            var a = await client.SendTextMessageAsync(
-                chatId: message.Chat.Id,
-                text: "Share location?",
-                parseMode: ParseMode.Markdown,
-                replyMarkup: new ReplyKeyboardMarkup()
+            var chatId = message.Chat.Id;
+            var list = new List<KeyboardButton>()
             {
-                Keyboard = new List<List<KeyboardButton>>()
-                            {
-                                new List<KeyboardButton>()
-                                {
-                                    new KeyboardButton(){ Text = "Share", RequestLocation = true }
-                                },
-                                new List<KeyboardButton>()
-                                {
-                                    new KeyboardButton(){ Text = "Cancel" } 
-                                }
-                            }
-            });
-
-            
-            switch(message.Text)
+                new KeyboardButton(){ Text = "Share", RequestLocation = true },
+                new KeyboardButton(){ Text = "Cancel" }
+            };
+            var markup = new ReplyKeyboardMarkup(list, resizeKeyboard: true);
+            if (message.Text == "/start")
             {
-                case "/start": 
-                    break;
+                var a = await client.SendTextMessageAsync
+                    (
+                    chatId,
+                    "Share location?",
+                    replyMarkup: markup
+                    );
             }
+            var latitude = message.Location.Latitude;
+            var longitude = message.Location.Longitude;
+            if (message.Type == MessageType.Location)
+            {
+                latitude = (float)Math.Round(latitude, 6);
+                longitude = (float)Math.Round(longitude, 6);
+                await client.SendTextMessageAsync(
+                        chatId,
+                        "Joyingiz Qabul Qilindi",
+                        ParseMode.Markdown,
+                        replyMarkup: markup);
+
+                Console.WriteLine("{0} {1}", latitude, longitude);
+            }
+
+
+
+            // switch (message.Text)
+            // {
+            //     case "/start":
+            //         break;
+            // }
 
         }
     }
