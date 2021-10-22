@@ -18,7 +18,7 @@ namespace bot
                                 new List<KeyboardButton>()
                                 {
                                     new KeyboardButton(){ Text = "Share", RequestLocation = true },
-                                    new KeyboardButton(){ Text = "Cancel" } 
+                                    new KeyboardButton(){ Text = "Cancel" }
                                 }
                             }
             };

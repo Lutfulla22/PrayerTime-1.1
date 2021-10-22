@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -77,16 +78,16 @@ namespace bot
 
         private static async Task BotOnMessageReceived(ITelegramBotClient client, Message message)
         {
-            Console.WriteLine($"{message.Text}");
             var chatId = message.Chat.Id;
-            var list = new List<KeyboardButton>()
-            {
-                new KeyboardButton(){ Text = "Share", RequestLocation = true },
-                new KeyboardButton(){ Text = "Cancel" }
-            };
-            var markup = new ReplyKeyboardMarkup(list, resizeKeyboard: true);
             if (message.Text == "/start")
             {
+                var list = new List<KeyboardButton>();
+                {
+
+                    new KeyboardButton() { Text = "Share", RequestLocation = true };
+                    new KeyboardButton() { Text = "Cancel" };
+                }
+                var markup = new ReplyKeyboardMarkup(list, resizeKeyboard: true);
                 var a = await client.SendTextMessageAsync
                     (
                     chatId,
@@ -94,29 +95,31 @@ namespace bot
                     replyMarkup: markup
                     );
             }
-            var latitude = message.Location.Latitude;
-            var longitude = message.Location.Longitude;
+
             if (message.Type == MessageType.Location)
             {
+                var latitude = message.Location.Latitude;
+                var longitude = message.Location.Longitude;
                 latitude = (float)Math.Round(latitude, 6);
                 longitude = (float)Math.Round(longitude, 6);
                 await client.SendTextMessageAsync(
                         chatId,
                         "Joyingiz Qabul Qilindi",
                         ParseMode.Markdown,
-                        replyMarkup: markup);
+                        replyMarkup: new ReplyKeyboardRemove());
 
-                Console.WriteLine("{0} {1}", latitude, longitude);
+                Console.WriteLine("{0};{1}", latitude, longitude);
             }
 
 
 
-            // switch (message.Text)
-            // {
-            //     case "/start":
-            //         break;
-            // }
+            switch (message.Text)
+            {
+                case "/start":
+                    break;
+            }
 
         }
+
     }
 }
